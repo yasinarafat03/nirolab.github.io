@@ -1673,6 +1673,10 @@ td:first-child {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
 }
 
+.slide-dark .slide-logo img {
+  filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
 /* Mission list with icons */
 .mission-list {
   display: flex;
