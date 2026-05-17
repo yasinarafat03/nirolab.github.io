@@ -289,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function startAutoPlay() {
     if (!isPlaying) return;
+    stopAutoPlay();
     resetProgress();
     autoPlay = setInterval(nextSlide, intervalTime);
     progressInterval = setInterval(updateProgress, 50);
@@ -298,6 +299,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function stopAutoPlay() {
     clearInterval(autoPlay);
     clearInterval(progressInterval);
+    autoPlay = null;
+    progressInterval = null;
     progressBar.style.width = '0%';
     progressBar.style.opacity = '0.5';
   }
