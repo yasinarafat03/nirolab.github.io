@@ -237,6 +237,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let autoPlay;
   let progressInterval;
   let progressStart;
+  let isPlaying = true;
+  let hoverPaused = false;
 
   // Create dots
   slides.forEach((_, i) => {
@@ -244,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dot.classList.add('presentation-dot');
     if (i === 0) dot.classList.add('active');
     dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-    dot.addEventListener('click', () => goToSlide(i));
+    dot.addEventListener('click', () => { manualNavigate(); goToSlide(i); });
     dotsContainer.appendChild(dot);
   });
 
@@ -257,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === currentIndex);
     });
-    resetProgress();
+    if (isPlaying && !hoverPaused) resetProgress();
   }
 
   function goToSlide(index) {
@@ -286,27 +288,57 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function startAutoPlay() {
+    if (!isPlaying) return;
     resetProgress();
     autoPlay = setInterval(nextSlide, intervalTime);
     progressInterval = setInterval(updateProgress, 50);
+    progressBar.style.opacity = '1';
   }
 
   function stopAutoPlay() {
     clearInterval(autoPlay);
     clearInterval(progressInterval);
     progressBar.style.width = '0%';
+    progressBar.style.opacity = '0.5';
   }
 
-  prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
-  nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
+  function manualNavigate() {
+    isPlaying = false;
+    stopAutoPlay();
+  }
+
+  function toggleAutoPlay() {
+    if (isPlaying) {
+      isPlaying = false;
+      stopAutoPlay();
+    } else {
+      isPlaying = true;
+      startAutoPlay();
+    }
+  }
+
+  prevBtn.addEventListener('click', () => { manualNavigate(); prevSlide(); });
+  nextBtn.addEventListener('click', () => { manualNavigate(); nextSlide(); });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') { stopAutoPlay(); prevSlide(); startAutoPlay(); }
-    if (e.key === 'ArrowRight' || e.key === ' ') { stopAutoPlay(); nextSlide(); startAutoPlay(); }
+    if (e.key === 'ArrowLeft') { manualNavigate(); prevSlide(); }
+    if (e.key === 'ArrowRight') { manualNavigate(); nextSlide(); }
+    if (e.key === ' ') { e.preventDefault(); toggleAutoPlay(); }
   });
 
-  container.addEventListener('mouseenter', stopAutoPlay);
-  container.addEventListener('mouseleave', startAutoPlay);
+  container.addEventListener('mouseenter', () => {
+    if (isPlaying) {
+      hoverPaused = true;
+      stopAutoPlay();
+    }
+  });
+
+  container.addEventListener('mouseleave', () => {
+    if (isPlaying && hoverPaused) {
+      hoverPaused = false;
+      startAutoPlay();
+    }
+  });
 
   startAutoPlay();
 });
