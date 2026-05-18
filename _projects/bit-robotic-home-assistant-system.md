@@ -13,7 +13,7 @@ team:
   - Dr. Shahnewaz Siddique
 ---
 
-![BIT Robotic Home Assistant System](/assets/images/projects/spatial-intelligence-robot-sim.jpeg)
+![BIT Robotic Home Assistant System](/assets/images/projects/bit-home-assistant.jpg)
 
 ## Overview
 
