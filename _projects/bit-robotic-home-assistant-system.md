@@ -4,7 +4,7 @@ description: AI-powered ROS2 robotic assistant for autonomous navigation, voice-
 status: Active
 featured: false
 order: 6
-image: /assets/images/projects/Bit_Title.gif
+image: /assets/images/projects/Bit-Home.gif
 duration: 2025 - Present
 funding: University Research Grant
 team:
